@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Gas Experiences Form</h1>
+  <hr>
+  <h3>Record your observations:</h3>
+  {% from "includes/_formhelpers.html" import render_field %}
+  <form method="POST" action="">
+  <div class="form-group">
+    {{render_field(form.name, class_="form-control")}}
+  </div>
+  <p><input type="submit" class="bt btn-primary" value="Submit"></p>
+</form>
+{% endblock %}
