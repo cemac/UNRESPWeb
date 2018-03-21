@@ -6,40 +6,70 @@
   <h3>Record your observations:</h3>
   {% from "includes/_formhelpers.html" import render_field %}
   <form method="POST" action="">
-  <div class="form-group">
+  <div class="form-inline">
     {{render_field(form.date, class_="form-control")}}
   </div>
-  <div class="form-check">
-    {{render_field(form.smell)}}
-  </div>
-  <div class="form-check">
-    {{render_field(form.throat)}}
-  </div>
-  <div class="form-check">
-    {{render_field(form.eyes)}}
-  </div>
-  <div class="form-check">
-    {{render_field(form.skin)}}
-  </div>
-  <div class="form-check">
-    {{render_field(form.tired)}}
-  </div>
-  <div class="form-check">
-    {{render_field(form.nausea)}}
-  </div>
+  <br>
+  {{form.smell.label}}
+  <br>
+  {% for subfield in form.smell %}
+    <td>{{ subfield }}</td>
+    <td>{{ subfield.label }}</td>
+  {% endfor %}
+  <br><br>
+  {{form.throat.label}}
+  <br>
+  {% for subfield in form.throat %}
+    <td>{{ subfield }}</td>
+    <td>{{ subfield.label }}</td>
+  {% endfor %}
+  <br><br>
+  {{form.eyes.label}}
+  <br>
+  {% for subfield in form.eyes %}
+    <td>{{ subfield }}</td>
+    <td>{{ subfield.label }}</td>
+  {% endfor %}
+  <br><br>
+  {{form.skin.label}}
+  <br>
+  {% for subfield in form.skin %}
+    <td>{{ subfield }}</td>
+    <td>{{ subfield.label }}</td>
+  {% endfor %}
+  <br><br>
+  {{form.tired.label}}
+  <br>
+  {% for subfield in form.tired %}
+    <td>{{ subfield }}</td>
+    <td>{{ subfield.label }}</td>
+  {% endfor %}
+  <br><br>
+  {{form.nausea.label}}
+  <br>
+  {% for subfield in form.nausea %}
+    <td>{{ subfield }}</td>
+    <td>{{ subfield.label }}</td>
+  {% endfor %}
+  <br><br>
   <div class="form-group">
     {{render_field(form.otherObs, class_="form-control")}}
   </div>
-  <div class="form-group">
+  <br>
+  <div class="form-inline">
     {{render_field(form.windDir, class_="form-control")}}
   </div>
-  <div class="form-group">
+  <br>
+  <div class="form-inline">
     {{render_field(form.windSpeed, class_="form-control")}}
   </div>
-  <div class="form-group">
+  <br>
+  <div class="form-inline">
     {{render_field(form.precip, class_="form-control")}}
   </div>
+  <br>
   <p><input type="submit" class="bt btn-primary" value="Submit"></p>
+  <br>
 </form>
 
 {% endblock %}

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, request
-from wtforms import Form, StringField, RadioField, SelectField, validators
+from wtforms import Form, TextAreaField, RadioField, SelectField, validators
 from wtforms.fields.html5 import DateField
 import datetime as dt
 
@@ -25,7 +25,7 @@ class GasExperiencesForm(Form):
        choices=[('Yes','Yes'),('No','No')])
     nausea = RadioField('Did the vumo make you feel nauseous?',\
        choices=[('Yes','Yes'),('No','No')])
-    otherObs = StringField('Could you see the vumo? What did it look like?\
+    otherObs = TextAreaField('Could you see the vumo? What did it look like?\
        For example colour, visibility. You can write any other observations in this box',\
        [validators.Length(min=0, max=500)])
     windDir = SelectField('Where was the wind coming from when you felt the vumo?',\
@@ -58,6 +58,7 @@ def Gas_Experiences():
         windDir = form.windDir.data
         windSpeed = form.windSpeed.data
         precip = form.precip.data
+        # print(date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip)
         flash('You successfully submitted the form', 'success')
         return redirect(url_for('Gas_Experiences'))
     return render_template('Gas_Experiences.html',form=form)
