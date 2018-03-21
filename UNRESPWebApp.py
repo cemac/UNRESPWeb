@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, request
-from wtforms import Form, StringField, RadioField, validators
+from wtforms import Form, StringField, RadioField, SelectField, validators
 from wtforms.fields.html5 import DateField
 import datetime as dt
 
@@ -10,7 +10,6 @@ app.secret_key="TemporaryKey"
 @app.route('/')
 def index():
     return render_template('home.html')
-
 
 #Gas experiences form
 class GasExperiencesForm(Form):
@@ -28,7 +27,20 @@ class GasExperiencesForm(Form):
        choices=[('Yes','Yes'),('No','No')])
     otherObs = StringField('Could you see the vumo? What did it look like?\
        For example colour, visibility. You can write any other observations in this box',\
-       [validators.Length(min=1, max=500)])
+       [validators.Length(min=0, max=500)])
+    windDir = SelectField('Where was the wind coming from when you felt the vumo?',\
+       [validators.NoneOf(('blank'),message='Please select')],\
+       choices=[('blank','--Please select--'),('N', 'North'), ('NE', 'Northeast'),\
+       ('E', 'East'), ('SE', 'SouthEast'), ('S', 'South'), ('SW', 'Southwest'),\
+       ('W', 'West'), ('NW', 'Northwest'), ('DK', "Don't know")])
+    windSpeed = SelectField('How strong was the wind when you felt the vumo?',\
+       [validators.NoneOf(('blank'),message='Please select')],\
+       choices=[('blank','--Please select--'),('No', 'No wind'), ('Slow', 'Slow wind'),\
+       ('Strong', 'Strong wind'), ('VStrong', 'Very strong wind'), ('DK', "Don't know")])
+    precip=SelectField('Was there any precipitation when you felt the vumo?',\
+       [validators.NoneOf(('blank'),message='Please select')],\
+       choices=[('blank','--Please select--'),('No', 'No precipitation'), ('Light', 'Light rain'),\
+       ('Rain', 'Rain'),('DK', "Don't know")])
 
 #Gas experiences
 @app.route('/Gas_Experiences',methods=['GET', 'POST'])
@@ -43,6 +55,9 @@ def Gas_Experiences():
         tired = form.tired.data
         nausea = form.nausea.data
         otherObs = form.otherObs.data
+        windDir = form.windDir.data
+        windSpeed = form.windSpeed.data
+        precip = form.precip.data
         flash('You successfully submitted the form', 'success')
         return redirect(url_for('Gas_Experiences'))
     return render_template('Gas_Experiences.html',form=form)
