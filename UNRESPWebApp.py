@@ -1,10 +1,36 @@
-from flask import Flask, render_template, flash, redirect, url_for, request
+from flask import Flask, render_template, flash, redirect, url_for, request, g
 from wtforms import Form, TextAreaField, RadioField, SelectField, validators
 from wtforms.fields.html5 import DateField
 import datetime as dt
+import sqlite3
+import os
 
 app = Flask(__name__)
 app.secret_key="TemporaryKey"
+DATABASE = 'UNRESPWeb.db'
+assert os.path.exists(DATABASE), "Unable to locate database"
+
+#Connect to DB
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+        db.row_factory = sqlite3.Row
+    return db
+
+#Close DB if app stops
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+#Query DB
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else (rv if rv else None)
 
 #Index
 @app.route('/')
@@ -32,15 +58,15 @@ class GasExperiencesForm(Form):
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('N', 'North'), ('NE', 'Northeast'),\
        ('E', 'East'), ('SE', 'SouthEast'), ('S', 'South'), ('SW', 'Southwest'),\
-       ('W', 'West'), ('NW', 'Northwest'), ('DK', "Don't know")])
+       ('W', 'West'), ('NW', 'Northwest'), ("Don't know", "Don't know")])
     windSpeed = SelectField('How strong was the wind when you felt the vumo?',\
        [validators.NoneOf(('blank'),message='Please select')],\
-       choices=[('blank','--Please select--'),('No', 'No wind'), ('Slow', 'Slow wind'),\
-       ('Strong', 'Strong wind'), ('VStrong', 'Very strong wind'), ('DK', "Don't know")])
+       choices=[('blank','--Please select--'),('No wind', 'No wind'), ('Slow wind', 'Slow wind'),\
+       ('Strong wind', 'Strong wind'), ('Very strong wind', 'Very strong wind'), ("Don't know", "Don't know")])
     precip=SelectField('Was there any precipitation when you felt the vumo?',\
        [validators.NoneOf(('blank'),message='Please select')],\
-       choices=[('blank','--Please select--'),('No', 'No precipitation'), ('Light', 'Light rain'),\
-       ('Rain', 'Rain'),('DK', "Don't know")])
+       choices=[('blank','--Please select--'),('No precipitation', 'No precipitation'), ('Light rain', 'Light rain'),\
+       ('Rain', 'Rain'),("Don't know", "Don't know")])
 
 #Gas experiences
 @app.route('/Gas_Experiences',methods=['GET', 'POST'])
@@ -58,7 +84,18 @@ def Gas_Experiences():
         windDir = form.windDir.data
         windSpeed = form.windSpeed.data
         precip = form.precip.data
-        # print(date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip)
+
+        ###Insert into database:
+        #Create cursor
+        db = get_db()
+        cur = db.cursor()
+        #Execute query:
+        cur.execute("INSERT INTO Experiences(date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip) VALUES(?,?,?,?,?,?,?,?,?,?,?)", (date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip))
+        #Commit to DB
+        db.commit()
+        #Close connection
+        cur.close()
+
         flash('You successfully submitted the form', 'success')
         return redirect(url_for('Gas_Experiences'))
     return render_template('Gas_Experiences.html',form=form)
