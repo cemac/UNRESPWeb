@@ -1,79 +1,114 @@
-{% extends 'layout.html' %}
-
-{% block body %}
-  <h1>Gas Experiences Form</h1>
-  <hr>
-  <h3>Record your observations:</h3>
-  {% from "includes/_formhelpers.html" import render_field %}
-  <form method="POST" action="">
-  <div class="form-inline">
-    {{render_field(form.date, class_="form-control")}}
-  </div>
-  <br>
-  {{form.smell.label}}
-  <br>
-  {% for subfield in form.smell %}
-    <td>{{ subfield }}</td>
-    <td>{{ subfield.label }}</td>
-  {% endfor %}
-  <br><br>
-  {{form.throat.label}}
-  <br>
-  {% for subfield in form.throat %}
-    <td>{{ subfield }}</td>
-    <td>{{ subfield.label }}</td>
-  {% endfor %}
-  <br><br>
-  {{form.eyes.label}}
-  <br>
-  {% for subfield in form.eyes %}
-    <td>{{ subfield }}</td>
-    <td>{{ subfield.label }}</td>
-  {% endfor %}
-  <br><br>
-  {{form.skin.label}}
-  <br>
-  {% for subfield in form.skin %}
-    <td>{{ subfield }}</td>
-    <td>{{ subfield.label }}</td>
-  {% endfor %}
-  <br><br>
-  {{form.tired.label}}
-  <br>
-  {% for subfield in form.tired %}
-    <td>{{ subfield }}</td>
-    <td>{{ subfield.label }}</td>
-  {% endfor %}
-  <br><br>
-  {{form.nausea.label}}
-  <br>
-  {% for subfield in form.nausea %}
-    <td>{{ subfield }}</td>
-    <td>{{ subfield.label }}</td>
-  {% endfor %}
-  <br><br>
-  <div class="form-group">
-    {{render_field(form.otherObs, class_="form-control")}}
-  </div>
-  <br>
-  <div class="form-inline">
-    {{render_field(form.windDir, class_="form-control")}}
-  </div>
-  <br>
-  <div class="form-inline">
-    {{render_field(form.windSpeed, class_="form-control")}}
-  </div>
-  <br>
-  <div class="form-inline">
-    {{render_field(form.precip, class_="form-control")}}
-  </div>
-  <br>
-  <b>Select your location by clicking on the map</b>
-  {{googlemap("my_awesome_map", lat=0.23234234, lng=-0.234234234, markers=[(0.12, -0.45345)])}}
-  <br>
-  <p><input type="submit" class="bt btn-primary" value="Submit"></p>
-  <br>
-</form>
-
-
-{% endblock %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>UNRESP Data</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      #map {
+        height: 500px;
+        width: 900px;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'includes/_navbar.html' %}
+    <div class="container">
+      <h1>Gas Experiences Form</h1>
+      <hr>
+      <h3>Record your observations:</h3>
+      {% from "includes/_formhelpers.html" import render_field %}
+      <form method="POST" action="">
+        <div class="form-inline">
+          {{render_field(form.date, class_="form-control")}}
+        </div>
+        <br>
+        {{form.smell.label}}
+        <br>
+        {% for subfield in form.smell %}
+          <td>{{ subfield }}</td>
+          <td>{{ subfield.label }}</td>
+        {% endfor %}
+        <br><br>
+        {{form.throat.label}}
+        <br>
+        {% for subfield in form.throat %}
+          <td>{{ subfield }}</td>
+          <td>{{ subfield.label }}</td>
+        {% endfor %}
+        <br><br>
+        {{form.eyes.label}}
+        <br>
+        {% for subfield in form.eyes %}
+          <td>{{ subfield }}</td>
+          <td>{{ subfield.label }}</td>
+        {% endfor %}
+        <br><br>
+        {{form.skin.label}}
+        <br>
+        {% for subfield in form.skin %}
+          <td>{{ subfield }}</td>
+          <td>{{ subfield.label }}</td>
+        {% endfor %}
+        <br><br>
+        {{form.tired.label}}
+        <br>
+        {% for subfield in form.tired %}
+          <td>{{ subfield }}</td>
+          <td>{{ subfield.label }}</td>
+        {% endfor %}
+        <br><br>
+        {{form.nausea.label}}
+        <br>
+        {% for subfield in form.nausea %}
+          <td>{{ subfield }}</td>
+          <td>{{ subfield.label }}</td>
+        {% endfor %}
+        <br><br>
+        <div class="form-group">
+          {{render_field(form.otherObs, class_="form-control")}}
+        </div>
+        <br>
+        <div class="form-inline">
+          {{render_field(form.windDir, class_="form-control")}}
+        </div>
+        <br>
+        <div class="form-inline">
+          {{render_field(form.windSpeed, class_="form-control")}}
+        </div>
+        <br>
+        <div class="form-inline">
+          {{render_field(form.precip, class_="form-control")}}
+        </div>
+        <br>
+        <b>Select your location by clicking on the map:</b>
+        <br>
+        <div id="map"></div>
+        <script>
+          var map;
+          function initMap() {
+            var myLatLng = new google.maps.LatLng(11.9854,-86.1608);
+            map = new google.maps.Map(document.getElementById('map'), {
+              center: myLatLng,
+              zoom: 10,
+              mapTypeId: google.maps.MapTypeId.HYBRID
+            });
+            // Place a draggable marker on the map
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                draggable:true,
+                title:"Drag me!"
+            });
+          }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnw_sLdaNZLt05my-efZ5i-AM-u97GQBw&callback=initMap"
+        async defer></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <br>
+        <p><input type="submit" class="bt btn-primary" value="Submit"></p>
+        <br>
+      </form>
+    </div>
+  </body>
+</html>

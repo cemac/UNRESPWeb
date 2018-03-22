@@ -4,12 +4,10 @@ from wtforms.fields.html5 import DateField
 import datetime as dt
 import sqlite3
 import os
-from flask_googlemaps import GoogleMaps
 
 app = Flask(__name__)
 app.secret_key="TemporaryKey"
-app.config['GOOGLEMAPS_KEY']="AIzaSyDnw_sLdaNZLt05my-efZ5i-AM-u97GQBw"
-GoogleMaps(app)
+# app.config['GOOGLEMAPS_KEY']="AIzaSyDnw_sLdaNZLt05my-efZ5i-AM-u97GQBw"
 DATABASE = 'UNRESPWeb.db'
 assert os.path.exists(DATABASE), "Unable to locate database"
 
