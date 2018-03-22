@@ -68,8 +68,12 @@
     {{render_field(form.precip, class_="form-control")}}
   </div>
   <br>
+  <b>Select your location by clicking on the map</b>
+  {{googlemap("my_awesome_map", lat=0.23234234, lng=-0.234234234, markers=[(0.12, -0.45345)])}}
+  <br>
   <p><input type="submit" class="bt btn-primary" value="Submit"></p>
   <br>
 </form>
+
 
 {% endblock %}
