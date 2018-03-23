@@ -87,16 +87,16 @@ def Gas_Experiences():
         windDir = form.windDir.data
         windSpeed = form.windSpeed.data
         precip = form.precip.data
-        latitude = form.latitude.data
-        longitude = form.longitude.data
-        # print(latitude,longitude)
+        latitude = float(form.latitude.data)
+        longitude = float(form.longitude.data)
 
         ###Insert into database:
         #Create cursor
         db = get_db()
         cur = db.cursor()
         #Execute query:
-        cur.execute("INSERT INTO Experiences(date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip) VALUES(?,?,?,?,?,?,?,?,?,?,?)", (date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip))
+        cur.execute("INSERT INTO Experiences(date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude)\
+         VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", (date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude))
         #Commit to DB
         db.commit()
         #Close connection
