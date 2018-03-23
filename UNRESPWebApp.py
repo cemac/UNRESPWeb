@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, request, g
-from wtforms import Form, TextAreaField, RadioField, SelectField, validators
+from wtforms import Form, DecimalField, TextAreaField, RadioField, SelectField, validators
 from wtforms.fields.html5 import DateField
 import datetime as dt
 import sqlite3
@@ -68,6 +68,8 @@ class GasExperiencesForm(Form):
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('No precipitation', 'No precipitation'), ('Light rain', 'Light rain'),\
        ('Rain', 'Rain'),("Don't know", "Don't know")])
+    latitude=DecimalField('latitude')
+    longitude=DecimalField('longitude')
 
 #Gas experiences
 @app.route('/Gas_Experiences',methods=['GET', 'POST'])
@@ -85,6 +87,9 @@ def Gas_Experiences():
         windDir = form.windDir.data
         windSpeed = form.windSpeed.data
         precip = form.precip.data
+        latitude = form.latitude.data
+        longitude = form.longitude.data
+        # print(latitude,longitude)
 
         ###Insert into database:
         #Create cursor
