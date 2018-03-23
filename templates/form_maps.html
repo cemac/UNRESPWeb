@@ -5,12 +5,28 @@
 {% if AllData %}
 <div class="jumbotron text-center">
   <p class="lead">
-    The map below currently shows all data relating to the question "Could you smell the vumo?"<br>
+    Use the drop-down menus below to select which data to visualise<br>
     Red circles indicate "Yes", green circles indicate "No"<br>
     The date of each observation can be viewed by hovering the mouse over the relevant circle
   <p>
 </div>
+<div class="container">
+  {% from "includes/_formhelpers.html" import render_field %}
+  <form method="POST" action="">
+    <div class="form-inline">
+      {{render_field(form.question, class_="form-control")}}
+    </div>
+    <br>
+    <div class="form-inline">
+      {{render_field(form.windDir, class_="form-control")}}
+      {{render_field(form.windSpeed, class_="form-control")}}
+      {{render_field(form.precip, class_="form-control")}}
+    </div>
+  </form>
+</div>
+<br>
 <div id="map"></div>
+<br><br>
 <script>
   var map;
   function initMap() {

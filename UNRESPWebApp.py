@@ -58,7 +58,7 @@ class GasExperiencesForm(Form):
     windDir = SelectField('Where was the wind coming from when you felt the vumo?',\
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('N', 'North'), ('NE', 'Northeast'),\
-       ('E', 'East'), ('SE', 'SouthEast'), ('S', 'South'), ('SW', 'Southwest'),\
+       ('E', 'East'), ('SE', 'Southeast'), ('S', 'South'), ('SW', 'Southwest'),\
        ('W', 'West'), ('NW', 'Northwest'), ("Don't know", "Don't know")])
     windSpeed = SelectField('How strong was the wind when you felt the vumo?',\
        [validators.NoneOf(('blank'),message='Please select')],\
@@ -106,15 +106,33 @@ def Gas_Experiences():
         return redirect(url_for('Gas_Experiences'))
     return render_template('Gas_Experiences.html',form=form)
 
+#Gas experiences map form
+class GasExperiencesMap(Form):
+    question = SelectField('Show answers to the question:',\
+       choices=[('smell','Could you smell the vumo?'),('throat', 'Could you feel the vumo in your throat?'),\
+       ('eyes', 'Could you feel the vumo in your eyes?'), ('skin', 'Could you feel the vumo on your skin?'),\
+       ('tired', 'Did the vumo make you unusually tired?'), ('nausea', 'Did the vumo make you feel nauseous?')])
+    windDir = SelectField('For wind direction:',\
+       choices=[('any','Any'),('N', 'North'), ('NE', 'Northeast'),\
+       ('E', 'East'), ('SE', 'Southeast'), ('S', 'South'), ('SW', 'Southwest'),\
+       ('W', 'West'), ('NW', 'Northwest')])
+    windSpeed = SelectField('wind speed:',\
+       choices=[('any','Any'),('No wind', 'No wind'), ('Slow wind', 'Slow wind'),\
+       ('Strong wind', 'Strong wind'), ('Very strong wind', 'Very strong wind')])
+    precip = SelectField('and precipitation:',\
+       choices=[('any','Any'),('No precipitation', 'No precipitation'), ('Light rain', 'Light rain'),\
+        ('Rain', 'Rain')])
+
 #Gas experiences maps
 @app.route('/form_maps',methods=['GET', 'POST'])
 def form_maps():
+    form = GasExperiencesMap(request.form)
     #Retrieve all data from DB:
     AllData = query_db('SELECT * FROM Experiences')
     if AllData is not None:
-        return render_template('form_maps.html', AllData=AllData)
+        return render_template('form_maps.html',AllData=AllData,form=form)
     else:
-        return render_template('form_maps.html')
+        return render_template('form_maps.html',form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
