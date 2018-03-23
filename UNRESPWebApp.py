@@ -101,5 +101,15 @@ def Gas_Experiences():
         return redirect(url_for('Gas_Experiences'))
     return render_template('Gas_Experiences.html',form=form)
 
+#Gas experiences maps
+@app.route('/form_maps',methods=['GET', 'POST'])
+def form_maps():
+    #Retrieve all data from DB:
+    AllData = query_db('SELECT * FROM Experiences')
+    if AllData is not None:
+        return render_template('form_maps.html', AllData=AllData)
+    else:
+        return render_template('form_maps.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
