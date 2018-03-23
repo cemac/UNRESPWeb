@@ -40,7 +40,7 @@ def index():
 
 #Gas experiences form
 class GasExperiencesForm(Form):
-    date = DateField('Date',format='%Y-%m-%d')
+    date = DateField('Date of experience',format='%Y-%m-%d')
     smell = RadioField('Could you smell the vumo?', choices=[('Yes','Yes'),('No','No')])
     throat = RadioField('Could you feel the vumo in your throat? For example burning or itching',\
        choices=[('Yes','Yes'),('No','No')])
