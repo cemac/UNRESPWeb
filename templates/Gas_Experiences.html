@@ -17,6 +17,11 @@
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
       {% endfor %}
+      {% if form.smell.errors %}
+        {% for error in form.smell.errors %}
+          <span class="help-inline"><font color="red">{{ error }}</font></span>
+        {% endfor %}
+      {% endif %}
       <br><br>
       {{form.throat.label}}
       <br>
@@ -24,6 +29,11 @@
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
       {% endfor %}
+      {% if form.throat.errors %}
+        {% for error in form.throat.errors %}
+          <span class="help-inline"><font color="red">{{ error }}</font></span>
+        {% endfor %}
+      {% endif %}
       <br><br>
       {{form.eyes.label}}
       <br>
@@ -31,6 +41,11 @@
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
       {% endfor %}
+      {% if form.eyes.errors %}
+        {% for error in form.eyes.errors %}
+          <span class="help-inline"><font color="red">{{ error }}</font></span>
+        {% endfor %}
+      {% endif %}
       <br><br>
       {{form.skin.label}}
       <br>
@@ -38,6 +53,11 @@
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
       {% endfor %}
+      {% if form.skin.errors %}
+        {% for error in form.skin.errors %}
+          <span class="help-inline"><font color="red">{{ error }}</font></span>
+        {% endfor %}
+      {% endif %}
       <br><br>
       {{form.tired.label}}
       <br>
@@ -45,6 +65,11 @@
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
       {% endfor %}
+      {% if form.tired.errors %}
+        {% for error in form.tired.errors %}
+          <span class="help-inline"><font color="red">{{ error }}</font></span>
+        {% endfor %}
+      {% endif %}
       <br><br>
       {{form.nausea.label}}
       <br>
@@ -52,6 +77,11 @@
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
       {% endfor %}
+      {% if form.nausea.errors %}
+        {% for error in form.nausea.errors %}
+          <span class="help-inline"><font color="red">{{ error }}</font></span>
+        {% endfor %}
+      {% endif %}
       <br><br>
       <div class="form-group">
         {{render_field(form.otherObs, class_="form-control")}}
