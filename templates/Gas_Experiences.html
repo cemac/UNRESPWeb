@@ -69,31 +69,40 @@
         {{render_field(form.precip, class_="form-control")}}
       </div>
       <br>
-      <b>Select your location by clicking on the map:</b>
+      <b>Select your location by dragging the marker:</b>
       <br>
       <div id="map"></div>
       <script>
-        var map;
+        var marker;
         function initMap() {
           var myLatLng = new google.maps.LatLng(11.9854,-86.1608);
-          map = new google.maps.Map(document.getElementById('map'), {
+          var map = new google.maps.Map(document.getElementById('map'), {
             center: myLatLng,
             zoom: 10,
             mapTypeId: google.maps.MapTypeId.HYBRID
           });
           // Place a draggable marker on the map
-          var marker = new google.maps.Marker({
+          marker = new google.maps.Marker({
               position: myLatLng,
               map: map,
               draggable:true,
+              animation: google.maps.Animation.DROP,
               title:"Drag me!"
           });
+          marker.addListener('drag', extractCoords);
+        }
+        function extractCoords() {
+           var lat = marker.getPosition().lat();
+           var lng = marker.getPosition().lng();
+           document.getElementById("lat").innerHTML = lat;
+           document.getElementById("lng").innerHTML = lng;
         }
       </script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnw_sLdaNZLt05my-efZ5i-AM-u97GQBw&callback=initMap"
       async defer></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <br>
+      (<span id="lat"></span> , <span id="lng"></span>)
+      <br><br>
       <p><input type="submit" class="bt btn-primary" value="Submit"></p>
       <br>
     </form>
