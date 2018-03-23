@@ -68,8 +68,8 @@ class GasExperiencesForm(Form):
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('No precipitation', 'No precipitation'), ('Light rain', 'Light rain'),\
        ('Rain', 'Rain'),("Don't know", "Don't know")])
-    latitude=DecimalField('latitude')
-    longitude=DecimalField('longitude')
+    latitude=DecimalField('latitude',[validators.NumberRange(min=10,max=16,message="latitude out of bounds")])
+    longitude=DecimalField('longitude',[validators.NumberRange(min=-88,max=-82,message="longitude out of bounds")])
 
 #Gas experiences
 @app.route('/Gas_Experiences',methods=['GET', 'POST'])
