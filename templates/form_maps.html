@@ -14,13 +14,29 @@
       zoom: 10,
       mapTypeId: 'satellite'
     });
-    // {% for dataPt in AllData %}
-    //   // Place a marker on the map
-    //   var marker = new google.maps.Marker({
-    //       position: ({{dataPt.lat}},{{dataPt.lon}}),
-    //       map: map,
-    //   });
-    // {% endfor %}
+    var green='#008000';
+    var red='#FF0000';
+    {% for dataPt in AllData %}
+    var dataCircle = new google.maps.Marker({
+        map: map,
+        position: {lat:{{dataPt.latitude}}, lng:{{dataPt.longitude}}},
+        title: '{{dataPt.date}}',
+        icon: {
+          {% if dataPt.smell=="Yes" %}
+            fillColor: red,
+            strokeColor: red,
+          {% else %}
+            fillColor: green,
+            strokeColor: green,
+          {% endif %}
+          strokeOpacity: 1.0,
+          strokeWeight: 1,
+          fillOpacity: 0.5,
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10,
+        },
+     });
+     {% endfor %}
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnw_sLdaNZLt05my-efZ5i-AM-u97GQBw&callback=initMap"
