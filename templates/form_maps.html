@@ -2,7 +2,6 @@
 
 {% block body %}
 
-{% if AllData %}
 <div class="jumbotron text-center">
   <p class="lead">
     Use the drop-down menus below to select which data to visualise<br>
@@ -15,6 +14,7 @@
   <form method="POST" action="">
     <div class="form-inline">
       {{render_field(form.question, class_="form-control")}}
+      <input type="submit" class="bt btn-success" value="Show map">
     </div>
     <br>
     <div class="form-inline">
@@ -38,6 +38,7 @@
     });
     var green='#008000';
     var red='#FF0000';
+    {% if AllData %}
     {% for dataPt in AllData %}
     var dataCircle = new google.maps.Marker({
         map: map,
@@ -59,11 +60,10 @@
         },
      });
      {% endfor %}
+     {% endif %}
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnw_sLdaNZLt05my-efZ5i-AM-u97GQBw&callback=initMap"
 async defer></script>
-
-{% endif %}
 
 {% endblock %}

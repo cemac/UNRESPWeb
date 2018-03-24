@@ -127,6 +127,13 @@ class GasExperiencesMap(Form):
 @app.route('/form_maps',methods=['GET', 'POST'])
 def form_maps():
     form = GasExperiencesMap(request.form)
+    if request.method == 'POST':
+        question = form.question.data
+        windDir = form.windDir.data
+        windSpeed = form.windSpeed.data
+        precip = form.precip.data
+        # print(question,windDir,windSpeed,precip)
+        return redirect(url_for('form_maps'))
     #Retrieve all data from DB:
     AllData = query_db('SELECT * FROM Experiences')
     if AllData is not None:
