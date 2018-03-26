@@ -4,6 +4,7 @@ from wtforms.fields.html5 import DateField
 import datetime as dt
 import sqlite3
 import os
+import pandas as pd
 
 app = Flask(__name__)
 app.secret_key="TemporaryKey"
@@ -32,6 +33,13 @@ def query_db(query, args=(), one=False):
     rv = cur.fetchall()
     cur.close()
     return (rv[0] if rv else None) if one else (rv if rv else None)
+
+#Query DB pandas
+def pandas_db(query):
+    db = get_db()
+    df = pd.read_sql_query(query,db)
+    db.close()
+    return df
 
 #Index
 @app.route('/')
@@ -127,19 +135,21 @@ class GasExperiencesMap(Form):
 @app.route('/form_maps',methods=['GET', 'POST'])
 def form_maps():
     form = GasExperiencesMap(request.form)
+    subData = pandas_db('SELECT * FROM Experiences')
     if request.method == 'POST':
         question = form.question.data
-        windDir = form.windDir.data
-        windSpeed = form.windSpeed.data
-        precip = form.precip.data
-        # print(question,windDir,windSpeed,precip)
-        return redirect(url_for('form_maps'))
-    #Retrieve all data from DB:
-    AllData = query_db('SELECT * FROM Experiences')
-    if AllData is not None:
-        return render_template('form_maps.html',AllData=AllData,form=form)
+        #Subset by wind direction:
+        if form.windDir.data != 'any':
+            subData = subData[subData['windDir']==form.windDir.data]
+        #Subset by wind speed:
+        if form.windSpeed.data != 'any':
+            subData = subData[subData['windSpeed']==form.windSpeed.data]
+        #Subset by precip:
+        if form.precip.data != 'any':
+            subData = subData[subData['precip']==form.precip.data]
     else:
-        return render_template('form_maps.html',form=form)
+        question = 'smell'
+    return render_template('form_maps.html',subData=subData,question=question,form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)

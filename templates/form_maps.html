@@ -24,6 +24,9 @@
     </div>
   </form>
 </div>
+{% if subData.shape[0]==0 %}
+  <h2><font color="red">No data for these filters</font></h2>
+{% endif %}
 <br>
 <div id="map"></div>
 <br><br>
@@ -38,14 +41,14 @@
     });
     var green='#008000';
     var red='#FF0000';
-    {% if AllData %}
-    {% for dataPt in AllData %}
+    {% if subData.shape[0]!=0 %}
+    {% for index, row in subData.iterrows(): %}
     var dataCircle = new google.maps.Marker({
         map: map,
-        position: {lat:{{dataPt.latitude}}, lng:{{dataPt.longitude}}},
-        title: '{{dataPt.date}}',
+        position: {lat:{{row['latitude']}}, lng:{{row['longitude']}}},
+        title: '{{row['date']}}',
         icon: {
-          {% if dataPt.smell=="Yes" %}
+          {% if row[question]=="Yes" %}
             fillColor: red,
             strokeColor: red,
           {% else %}
