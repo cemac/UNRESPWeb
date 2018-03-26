@@ -7,8 +7,10 @@ import os
 import pandas as pd
 
 app = Flask(__name__)
-app.secret_key="TemporaryKey"
-# app.config['GOOGLEMAPS_KEY']="AIzaSyDnw_sLdaNZLt05my-efZ5i-AM-u97GQBw"
+assert os.path.exists('AppSecretKey.txt'), "Unable to locate app secret key"
+with open('AppSecretKey.txt','r') as f:
+    key=f.read()
+app.secret_key=key
 DATABASE = 'UNRESPWeb.db'
 assert os.path.exists(DATABASE), "Unable to locate database"
 
@@ -152,4 +154,4 @@ def form_maps():
     return render_template('form_maps.html',subData=subData,question=question,form=form)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
