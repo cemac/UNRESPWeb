@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container">
+  <h1>Feedback form</h1>
+  <hr>
+  <p style="font-size:20px; text-align:justify">
+  Recording the experiences of vumo is part of a scientific research project <a href="http://unresp.com" target="_blank">UNRESP</a>.
+  We collect no personal data but any feedback and observations you submit may be used anonymously for better understanding
+  the vumo hazard and improve its monitoring and forecasting. If you would like us to reply to you, please include your name
+  and email address in the text box below.
+  </p>
+  {% from "includes/_formhelpers.html" import render_field %}
+  <form method="POST" action="">
+    <div class="form-group">
+      {{render_field(form.feedback, class_="form-control", style="height:500px")}}
+    </div>
+    <p><input type="submit" class="bt btn-primary" value="Submit"></p>
+    <br><br>
+  </form>
+</div>
+
+
+
+{% endblock %}

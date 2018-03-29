@@ -159,5 +159,18 @@ def form_maps():
 
     return render_template('form_maps.html',subData=subData,question=question,form=form)
 
+#Feedback form
+class FeedbackForm(Form):
+    feedback = TextAreaField('Feedback:',[validators.Length(min=0, max=5000)])
+
+#feedback
+@app.route('/feedback',methods=['GET', 'POST'])
+def feedback():
+    form = FeedbackForm(request.form)
+    if request.method == 'POST' and form.validate():
+        flash('You successfully submitted the feedback form', 'success')
+        return redirect(url_for('feedback'))
+    return render_template('feedback.html',form=form)
+
 if __name__ == '__main__':
     app.run()
