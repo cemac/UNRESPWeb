@@ -69,15 +69,15 @@ class GasExperiencesForm(Form):
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('N', 'North'), ('NE', 'Northeast'),\
        ('E', 'East'), ('SE', 'Southeast'), ('S', 'South'), ('SW', 'Southwest'),\
-       ('W', 'West'), ('NW', 'Northwest'), ("Don't know", "Don't know")])
+       ('W', 'West'), ('NW', 'Northwest'), ("Dont know", "Don't know")])
     windSpeed = SelectField('How strong was the wind when you felt the vumo?',\
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('No wind', 'No wind'), ('Slow wind', 'Slow wind'),\
-       ('Strong wind', 'Strong wind'), ('Very strong wind', 'Very strong wind'), ("Don't know", "Don't know")])
+       ('Strong wind', 'Strong wind'), ('Very strong wind', 'Very strong wind'), ("Dont know", "Don't know")])
     precip=SelectField('Was there any precipitation when you felt the vumo?',\
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('No precipitation', 'No precipitation'), ('Light rain', 'Light rain'),\
-       ('Rain', 'Rain'),("Don't know", "Don't know")])
+       ('Rain', 'Rain'),("Dont know", "Don't know")])
     latitude=DecimalField('latitude',[validators.NumberRange(min=10,max=16,message="latitude out of bounds")])
     longitude=DecimalField('longitude',[validators.NumberRange(min=-88,max=-82,message="longitude out of bounds")])
 
@@ -160,4 +160,4 @@ def form_maps():
     return render_template('form_maps.html',subData=subData,question=question,form=form)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
