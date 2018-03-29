@@ -16,7 +16,7 @@
       {{render_field(form.question, class_="form-control")}}
       <input type="submit" class="bt btn-success" value="Show map">
     </div>
-    <br>direction
+    <br>
     <div class="form-inline">
       {{render_field(form.windDir, class_="form-control")}}
       {{render_field(form.windSpeed, class_="form-control")}}
@@ -37,7 +37,7 @@
     map = new google.maps.Map(document.getElementById('map'), {
       center: myLatLng,
       zoom: 10,
-      mapTypeId: 'satellite'
+      mapTypeId: 'terrain'
     });
     var green='#008000';
     var red='#FF0000';
