@@ -99,14 +99,18 @@ def Gas_Experiences():
         precip = form.precip.data
         latitude = float(form.latitude.data)
         longitude = float(form.longitude.data)
+        if smell=='Yes' or throat=='Yes' or eyes=='Yes' or skin=='Yes' or tired=='Yes' or nausea=='Yes':
+            sense = 'Yes'
+        else:
+            sense = 'No'
 
         ###Insert into database:
         #Create cursor
         db = get_db()
         cur = db.cursor()
         #Execute query:
-        cur.execute("INSERT INTO Experiences(date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude)\
-         VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", (date,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude))
+        cur.execute("INSERT INTO Experiences(date,sense,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude)\
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (date,sense,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude))
         #Commit to DB
         db.commit()
         #Close connection
@@ -119,7 +123,8 @@ def Gas_Experiences():
 #Gas experiences map form
 class GasExperiencesMap(Form):
     question = SelectField('Show answers to the question:',\
-       choices=[('smell','Could you smell the vumo?'),('throat', 'Could you feel the vumo in your throat?'),\
+       choices=[('sense',"Could you sense the vumo (i.e. any questions answered 'Yes')?"),\
+       ('smell','Could you smell the vumo?'),('throat', 'Could you feel the vumo in your throat?'),\
        ('eyes', 'Could you feel the vumo in your eyes?'), ('skin', 'Could you feel the vumo on your skin?'),\
        ('tired', 'Did the vumo make you unusually tired?'), ('nausea', 'Did the vumo make you feel nauseous?')])
     windDir = SelectField('For wind direction:',\
@@ -150,8 +155,9 @@ def form_maps():
         if form.precip.data != 'any':
             subData = subData[subData['precip']==form.precip.data]
     else:
-        question = 'smell'
+        question = 'sense'
+
     return render_template('form_maps.html',subData=subData,question=question,form=form)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

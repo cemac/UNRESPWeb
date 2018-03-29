@@ -16,7 +16,7 @@
       {{render_field(form.question, class_="form-control")}}
       <input type="submit" class="bt btn-success" value="Show map">
     </div>
-    <br>
+    <br>direction
     <div class="form-inline">
       {{render_field(form.windDir, class_="form-control")}}
       {{render_field(form.windSpeed, class_="form-control")}}
@@ -46,7 +46,17 @@
     var dataCircle = new google.maps.Marker({
         map: map,
         position: {lat:{{row['latitude']}}, lng:{{row['longitude']}}},
-        title: '{{row['date']}}',
+        title: 'Date: {{row["date"]}}\n\
+Could you smell the vumo?: {{row["smell"]}}\n\
+Could you feel the vumo in your throat?: {{row["throat"]}}\n\
+Could you feel the vumo in your eyes?: {{row["eyes"]}}\n\
+Could you feel the vumo on your skin?: {{row["skin"]}}\n\
+Did the vumo make you unusually tired?: {{row["tired"]}}\n\
+Did the vumo make you feel nauseous?: {{row["nausea"]}}\n\
+Wind direction: {{row["windDir"]}}\n\
+Wind speed: {{row["windSpeed"]}}\n\
+Precipitation: {{row["precip"]}}\n\
+',
         icon: {
           {% if row[question]=="Yes" %}
             fillColor: red,
