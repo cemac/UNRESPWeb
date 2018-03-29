@@ -168,6 +168,17 @@ class FeedbackForm(Form):
 def feedback():
     form = FeedbackForm(request.form)
     if request.method == 'POST' and form.validate():
+        feedback=form.feedback.data
+        ###Insert into database:
+        #Create cursor
+        db = get_db()
+        cur = db.cursor()
+        #Execute query:
+        cur.execute("INSERT INTO Feedback(feedback) VALUES(?)", (feedback,))
+        #Commit to DB
+        db.commit()
+        #Close connection
+        cur.close()
         flash('You successfully submitted the feedback form', 'success')
         return redirect(url_for('feedback'))
     return render_template('feedback.html',form=form)
