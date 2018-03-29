@@ -116,7 +116,7 @@ def Gas_Experiences():
         #Close connection
         cur.close()
 
-        flash('You successfully submitted the form', 'success')
+        flash('You successfully submitted the questionnaire', 'success')
         return redirect(url_for('Gas_Experiences'))
     return render_template('Gas_Experiences.html',form=form)
 
