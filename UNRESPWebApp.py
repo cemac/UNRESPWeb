@@ -48,6 +48,11 @@ def pandas_db(query):
 def index():
     return render_template('home.html')
 
+#Index (es)
+@app.route('/es')
+def index_es():
+    return render_template('home-es.html')
+
 #Gas experiences form
 class GasExperiencesForm(Form):
     date = DateField('Date of experience',format='%Y-%m-%d')
