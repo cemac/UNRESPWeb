@@ -86,9 +86,42 @@ class GasExperiencesForm(Form):
     latitude=DecimalField('latitude',[validators.NumberRange(min=10,max=16,message="latitude out of bounds")])
     longitude=DecimalField('longitude',[validators.NumberRange(min=-88,max=-82,message="longitude out of bounds")])
 
-#Gas experiences
-@app.route('/Gas_Experiences',methods=['GET', 'POST'])
-def Gas_Experiences():
+#Gas experiences form (es)
+class GasExperiencesFormEs(Form):
+    date = DateField('Fecha de la experiencia',format='%Y-%m-%d')
+    smell = RadioField('¿Usted sintió el olor del vumo?', choices=[('Yes','Sí'),('No','No')])
+    throat = RadioField('¿Usted sintió el vumo en la garganta? Por ejemplo, ardor o prurito',\
+       choices=[('Yes','Sí'),('No','No')])
+    eyes = RadioField('¿Usted sintió el vumo en los ojos? Por ejemplo, ardor o prurito',\
+       choices=[('Yes','Sí'),('No','No')])
+    skin = RadioField('¿Usted sintió el vumo en la piel? Por ejemplo, ardor o prurito',\
+       choices=[('Yes','Sí'),('No','No')])
+    tired = RadioField('¿El vumo le hizo sentir inusualmente cansado/a?',\
+       choices=[('Yes','Sí'),('No','No')])
+    nausea = RadioField('¿El vumo le provocó náuseas?',\
+       choices=[('Yes','Sí'),('No','No')])
+    otherObs = TextAreaField('¿Podía ver el vumo? ¿Cómo se veía?\
+       Por ejemplo el color, la visibilidad. Para cualquier observación, puede escribir en este espacio',\
+       [validators.Length(min=0, max=500)])
+    windDir = SelectField('¿De dónde venía el viento cuando se sintió el vumo?',\
+       [validators.NoneOf(('blank'),message='Por favor seleccione')],\
+       choices=[('blank','--Por favor seleccione--'),('N', 'Norte'), ('NE', 'Noreste'),\
+       ('E', 'Este'), ('SE', 'Sudeste'), ('S', 'Sur'), ('SW', 'Sudoeste'),\
+       ('W', 'Oeste'), ('NW', 'Noroeste'), ("Dont know", "No se sabe")])
+    windSpeed = SelectField('¿Cómo era de fuerte el viento?',\
+       [validators.NoneOf(('blank'),message='Por favor seleccione')],\
+       choices=[('blank','--Por favor seleccione--'),('No wind', 'No había viento'), ('Slow wind', 'No muy fuerte'),\
+       ('Strong wind', 'viento fuerte'), ('Very strong wind', 'viento muy fuerte'), ("Dont know", "no se sabe")])
+    precip=SelectField('¿Había lluvia cuando se sintió el vumo?',\
+       [validators.NoneOf(('blank'),message='Por favor seleccione')],\
+       choices=[('blank','--Por favor seleccione--'),('No precipitation', 'No había lluvia'), ('Light rain', 'lluvia ligera'),\
+       ('Rain', 'lluvia'),("Dont know", "no se sabe")])
+    latitude=DecimalField('latitud',[validators.NumberRange(min=10,max=16,message="latitud fuera de límites")])
+    longitude=DecimalField('longitud',[validators.NumberRange(min=-88,max=-82,message="longitud fuera de límites")])
+
+#Questionnaire
+@app.route('/Questionnaire',methods=['GET', 'POST'])
+def Questionnaire():
     form = GasExperiencesForm(request.form)
     if request.method == 'POST' and form.validate():
         date = form.date.data
@@ -122,8 +155,47 @@ def Gas_Experiences():
         cur.close()
 
         flash('You successfully submitted the questionnaire', 'success')
-        return redirect(url_for('Gas_Experiences'))
+        return redirect(url_for('Questionnaire'))
     return render_template('Gas_Experiences.html',form=form)
+
+#Questionnaire (es)
+@app.route('/Encuesta',methods=['GET', 'POST'])
+def Questionnaire_Es():
+    form = GasExperiencesFormEs(request.form)
+    if request.method == 'POST' and form.validate():
+        date = form.date.data
+        smell = form.smell.data
+        throat = form.throat.data
+        eyes = form.eyes.data
+        skin = form.skin.data
+        tired = form.tired.data
+        nausea = form.nausea.data
+        otherObs = form.otherObs.data
+        windDir = form.windDir.data
+        windSpeed = form.windSpeed.data
+        precip = form.precip.data
+        latitude = float(form.latitude.data)
+        longitude = float(form.longitude.data)
+        if smell=='Yes' or throat=='Yes' or eyes=='Yes' or skin=='Yes' or tired=='Yes' or nausea=='Yes':
+            sense = 'Yes'
+        else:
+            sense = 'No'
+
+        ###Insert into database:
+        #Create cursor
+        db = get_db()
+        cur = db.cursor()
+        #Execute query:
+        cur.execute("INSERT INTO Experiences(date,sense,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude)\
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (date,sense,smell,throat,eyes,skin,tired,nausea,otherObs,windDir,windSpeed,precip,latitude,longitude))
+        #Commit to DB
+        db.commit()
+        #Close connection
+        cur.close()
+
+        flash('Enviaste con éxito la encuesta', 'success')
+        return redirect(url_for('Questionnaire_Es'))
+    return render_template('Gas_Experiences-es.html',form=form)
 
 #Gas experiences map form
 class GasExperiencesMap(Form):

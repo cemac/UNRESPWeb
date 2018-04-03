@@ -1,13 +1,13 @@
-{% extends 'layout.html' %}
+{% extends 'layout-es.html' %}
 
 {% block body %}
   <div align="right">
     <a href="/Questionnaire">English</a> | <a href="/Encuesta">Español</a>
   </div>
   <div class="container">
-    <h1>Vumo Experiences Questionnaire</h1>
+    <h1>Encuesta de experiencias de vumo</h1>
     <hr>
-    <h3>Record your observations:</h3>
+    <h3>Registre sus observaciones:</h3>
     {% from "includes/_formhelpers.html" import render_field %}
     <form method="POST" action="">
       <div class="form-inline">
@@ -102,7 +102,7 @@
         {{render_field(form.precip, class_="form-control")}}
       </div>
       <br>
-      <b>Drag the marker to the location of your experience (or allow website to access your location)</b>
+      <b>Arrastra el marcador a la ubicación de tu experiencia (o permitir el sitio web tener acceso a su ubicación actua)</b>
       <br>
       <div id="map"></div>
       <div class="form-inline">
@@ -129,7 +129,7 @@
           map: map,
           draggable:true,
           animation: google.maps.Animation.DROP,
-          title:"Drag me!"
+          title:"Arrástrame!"
       });
       //Add listener for draggable marker
       marker.addListener('drag', extractCoords);
