@@ -83,8 +83,8 @@ class GasExperiencesForm(Form):
        [validators.NoneOf(('blank'),message='Please select')],\
        choices=[('blank','--Please select--'),('No precipitation', 'No precipitation'), ('Light rain', 'Light rain'),\
        ('Rain', 'Rain'),("Dont know", "Don't know")])
-    latitude=DecimalField('latitude',[validators.NumberRange(min=10,max=16,message="latitude out of bounds")])
-    longitude=DecimalField('longitude',[validators.NumberRange(min=-88,max=-82,message="longitude out of bounds")])
+    latitude=DecimalField('Latitude',[validators.NumberRange(min=10,max=16,message="Latitude out of bounds")])
+    longitude=DecimalField('Longitude',[validators.NumberRange(min=-88,max=-82,message="Longitude out of bounds")])
 
 #Gas experiences form (es)
 class GasExperiencesFormEs(Form):
@@ -111,13 +111,13 @@ class GasExperiencesFormEs(Form):
     windSpeed = SelectField('¿Cómo era de fuerte el viento?',\
        [validators.NoneOf(('blank'),message='Por favor seleccione')],\
        choices=[('blank','--Por favor seleccione--'),('No wind', 'No había viento'), ('Slow wind', 'No muy fuerte'),\
-       ('Strong wind', 'viento fuerte'), ('Very strong wind', 'viento muy fuerte'), ("Dont know", "no se sabe")])
+       ('Strong wind', 'Viento fuerte'), ('Very strong wind', 'Viento muy fuerte'), ("Dont know", "No se sabe")])
     precip=SelectField('¿Había lluvia cuando se sintió el vumo?',\
        [validators.NoneOf(('blank'),message='Por favor seleccione')],\
-       choices=[('blank','--Por favor seleccione--'),('No precipitation', 'No había lluvia'), ('Light rain', 'lluvia ligera'),\
-       ('Rain', 'lluvia'),("Dont know", "no se sabe")])
-    latitude=DecimalField('latitud',[validators.NumberRange(min=10,max=16,message="latitud fuera de límites")])
-    longitude=DecimalField('longitud',[validators.NumberRange(min=-88,max=-82,message="longitud fuera de límites")])
+       choices=[('blank','--Por favor seleccione--'),('No precipitation', 'No había lluvia'), ('Light rain', 'Lluvia ligera'),\
+       ('Rain', 'Lluvia'),("Dont know", "No se sabe")])
+    latitude=DecimalField('Latitud',[validators.NumberRange(min=10,max=16,message="Latitud fuera de límites")])
+    longitude=DecimalField('Longitud',[validators.NumberRange(min=-88,max=-82,message="Longitud fuera de límites")])
 
 #Questionnaire
 @app.route('/Questionnaire',methods=['GET', 'POST'])
@@ -215,9 +215,27 @@ class GasExperiencesMap(Form):
        choices=[('any','Any'),('No precipitation', 'No precipitation'), ('Light rain', 'Light rain'),\
         ('Rain', 'Rain')])
 
+#Gas experiences map form (es)
+class GasExperiencesMapEs(Form):
+    question = SelectField('Ver respuestas a la pregunta:',\
+       choices=[('sense',"¿Usted sintió el vumo? (i.e. 'Sí' a cualquier pregunta"),\
+       ('smell','¿Usted sintió el olor del vumo?'),('throat', '¿Usted sintió el vumo en la garganta?'),\
+       ('eyes', '¿Usted sintió el vumo en los ojos?'), ('skin', '¿Usted sintió el vumo en la piel?'),\
+       ('tired', '¿El vumo le hizo sentir inusualmente cansado/a?'), ('nausea', '¿El vumo le provocó náuseas?')])
+    windDir = SelectField('Dirección del viento:',\
+       choices=[('any','Cualquier'),('N', 'Norte'), ('NE', 'Noreste'),\
+       ('E', 'Este'), ('SE', 'Sudeste'), ('S', 'Sur'), ('SW', 'Sudoeste'),\
+       ('W', 'Oeste'), ('NW', 'Noroeste')])
+    windSpeed = SelectField('Velocidad del viento:',\
+       choices=[('any','Cualquier'),('No wind', 'No había viento'), ('Slow wind', 'No muy fuerte'),\
+       ('Strong wind', 'Viento fuerte'), ('Very strong wind', 'Viento muy fuerte')])
+    precip = SelectField('Lluvia:',\
+       choices=[('any','Cualquier'),('No precipitation', 'No había lluvia'), ('Light rain', 'Lluvia ligera'),\
+        ('Rain', 'Lluvia')])
+
 #Gas experiences maps
-@app.route('/form_maps',methods=['GET', 'POST'])
-def form_maps():
+@app.route('/Maps',methods=['GET', 'POST'])
+def Maps():
     form = GasExperiencesMap(request.form)
     subData = pandas_db('SELECT * FROM Experiences')
     if request.method == 'POST':
@@ -233,8 +251,27 @@ def form_maps():
             subData = subData[subData['precip']==form.precip.data]
     else:
         question = 'sense'
-
     return render_template('form_maps.html',subData=subData,question=question,form=form)
+
+#Gas experiences maps (es)
+@app.route('/Mapas',methods=['GET', 'POST'])
+def Mapas():
+    form = GasExperiencesMapEs(request.form)
+    subData = pandas_db('SELECT * FROM Experiences')
+    if request.method == 'POST':
+        question = form.question.data
+        #Subset by wind direction:
+        if form.windDir.data != 'any':
+            subData = subData[subData['windDir']==form.windDir.data]
+        #Subset by wind speed:
+        if form.windSpeed.data != 'any':
+            subData = subData[subData['windSpeed']==form.windSpeed.data]
+        #Subset by precip:
+        if form.precip.data != 'any':
+            subData = subData[subData['precip']==form.precip.data]
+    else:
+        question = 'sense'
+    return render_template('form_maps-es.html',subData=subData,question=question,form=form)
 
 #Feedback form
 class FeedbackForm(Form):

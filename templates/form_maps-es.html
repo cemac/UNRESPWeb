@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'layout-es.html' %}
 
 {% block body %}
 <div align="right">
@@ -6,9 +6,10 @@
 </div>
 <div class="jumbotron text-center">
   <p class="lead">
-    Use the drop-down menus below to select which data to view<br>
-    Red circles indicate where vumo was felt, green circles indicate that no vumo was felt<br>
-    Hover the mouse over each circle to view the full list of observations
+    Use los menús desplegables abajo para seleccionar los datos que quiere ver<br>
+    Los círculos rojos indican el lugar donde se sintió el vumo<br>
+    Los círculos verdes indican que no se sintió el vumo<br>
+    Puede colocar el puntero sobre cada círculo para ver la lista completa de observaciones
   <p>
 </div>
 <div class="container">
@@ -16,7 +17,7 @@
   <form method="POST" action="">
     <div class="form-inline">
       {{render_field(form.question, class_="form-control")}}
-      <input type="submit" class="bt btn-success" value="Show map">
+      <input type="submit" class="bt btn-success" value="Ver mapa">
     </div>
     <br>
     <div class="form-inline">
@@ -27,7 +28,7 @@
   </form>
 </div>
 {% if subData.shape[0]==0 %}
-  <h2><font color="red">No data for these filters</font></h2>
+  <h2><font color="red">Sin datos para estos filtros</font></h2>
 {% endif %}
 <br>
 <div id="map"></div>
@@ -48,16 +49,16 @@
     var dataCircle = new google.maps.Marker({
         map: map,
         position: {lat:{{row['latitude']}}, lng:{{row['longitude']}}},
-        title: 'Date: {{row["date"]}}\n\
-Could you smell the vumo?: {{row["smell"]}}\n\
-Could you feel the vumo in your throat?: {{row["throat"]}}\n\
-Could you feel the vumo in your eyes?: {{row["eyes"]}}\n\
-Could you feel the vumo on your skin?: {{row["skin"]}}\n\
-Did the vumo make you unusually tired?: {{row["tired"]}}\n\
-Did the vumo make you feel nauseous?: {{row["nausea"]}}\n\
-Wind direction: {{row["windDir"]}}\n\
-Wind speed: {{row["windSpeed"]}}\n\
-Precipitation: {{row["precip"]}}\n\
+        title: 'Fecha: {{row["date"]}}\n\
+¿Usted sintió el olor del vumo?: {{row["smell"]}}\n\
+¿Usted sintió el vumo en la garganta?: {{row["throat"]}}\n\
+¿Usted sintió el vumo en los ojos?: {{row["eyes"]}}\n\
+¿Usted sintió el vumo en la piel?: {{row["skin"]}}\n\
+¿El vumo le hizo sentir inusualmente cansado/a?: {{row["tired"]}}\n\
+¿El vumo le provocó náuseas?: {{row["nausea"]}}\n\
+Dirección del viento: {{row["windDir"]}}\n\
+Velocidad del viento: {{row["windSpeed"]}}\n\
+Lluvia: {{row["precip"]}}\n\
 ',
         icon: {
           {% if row[question]=="Yes" %}
