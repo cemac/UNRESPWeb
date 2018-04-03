@@ -1,0 +1,28 @@
+{% extends 'layout-es.html' %}
+
+{% block body %}
+<div align="right">
+  <a href="/Feedback">English</a> | <a href="/Comentarios">Español</a>
+</div>
+<div class="container">
+  <h1>¡Déjenos sus comentarios!</h1>
+  <hr>
+  <p style="font-size:20px; text-align:justify">
+  Registrar sus experiencias del vumo forma parte del proyecto de la investigación <a href="http://unresp.com" target="_blank">UNRESP</a>.
+  No recogemos en nuestro sitio web ningún dato personal, pero los comentarios y observaciones que usted registre podrán ser usados por
+  los investigadores, de forma anónima, para lograr un mejor entendimiento del riesgo del vumo y mejorar los sistemas de monitoreo y
+  control de pronósticos. Rogamos indique su nombre y correo electrónico en el espacio si usted desea que contestemos a su mensaje.
+  </p>
+  {% from "includes/_formhelpers.html" import render_field %}
+  <form method="POST" action="">
+    <div class="form-group">
+      {{render_field(form.feedback, class_="form-control", style="height:500px")}}
+    </div>
+    <p><input type="submit" class="bt btn-primary" value="Enviar"></p>
+    <br><br>
+  </form>
+</div>
+
+
+
+{% endblock %}

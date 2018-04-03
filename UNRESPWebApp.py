@@ -275,11 +275,15 @@ def Mapas():
 
 #Feedback form
 class FeedbackForm(Form):
-    feedback = TextAreaField('Feedback:',[validators.Length(min=0, max=5000)])
+    feedback = TextAreaField('Feedback:',[validators.Length(min=1, max=5000)])
+
+#Feedback form (es)
+class FeedbackFormEs(Form):
+    feedback = TextAreaField('Comentarios:',[validators.Length(min=1, max=5000)])
 
 #feedback
-@app.route('/feedback',methods=['GET', 'POST'])
-def feedback():
+@app.route('/Feedback',methods=['GET', 'POST'])
+def Feedback():
     form = FeedbackForm(request.form)
     if request.method == 'POST' and form.validate():
         feedback=form.feedback.data
@@ -294,8 +298,28 @@ def feedback():
         #Close connection
         cur.close()
         flash('You successfully submitted the feedback form', 'success')
-        return redirect(url_for('feedback'))
+        return redirect(url_for('Feedback'))
     return render_template('feedback.html',form=form)
+
+#feedback (es)
+@app.route('/Comentarios',methods=['GET', 'POST'])
+def Comentarios():
+    form = FeedbackFormEs(request.form)
+    if request.method == 'POST' and form.validate():
+        feedback=form.feedback.data
+        ###Insert into database:
+        #Create cursor
+        db = get_db()
+        cur = db.cursor()
+        #Execute query:
+        cur.execute("INSERT INTO Feedback(feedback) VALUES(?)", (feedback,))
+        #Commit to DB
+        db.commit()
+        #Close connection
+        cur.close()
+        flash('Enviaste con éxito los comentarios', 'success')
+        return redirect(url_for('Comentarios'))
+    return render_template('feedback-es.html',form=form)
 
 if __name__ == '__main__':
     app.run()
