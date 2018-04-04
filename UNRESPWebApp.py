@@ -46,11 +46,25 @@ def pandas_db(query):
 #Index
 @app.route('/')
 def index():
+    supported_languages = ["en", "es"]
+    try:
+        lang = request.accept_languages.best_match(supported_languages)
+        print(lang)
+    except:
+        lang = "es"
+    if(lang=="en"):
+        return redirect(url_for('Home'))
+    else:
+        return redirect(url_for('Home_es'))
+
+#Home
+@app.route('/en')
+def Home():
     return render_template('home.html')
 
-#Index (es)
+#Home (es)
 @app.route('/es')
-def index_es():
+def Home_es():
     return render_template('home-es.html')
 
 #Gas experiences form
