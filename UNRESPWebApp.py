@@ -88,17 +88,25 @@ class GasExperiencesForm(Form):
 
 #Gas experiences form (es)
 class GasExperiencesFormEs(Form):
-    date = DateField('Fecha de la experiencia',format='%Y-%m-%d')
-    smell = RadioField('¿Usted sintió el olor del vumo?', choices=[('Yes','Sí'),('No','No')])
-    throat = RadioField('¿Usted sintió el vumo en la garganta? Por ejemplo, ardor o prurito',\
+    date = DateField('Fecha de la experiencia',
+       [validators.DataRequired(message="No es una fecha válida")],format='%Y-%m-%d')
+    smell = RadioField('¿Usted sintió el olor del vumo?',
+       [validators.InputRequired(message="No es una selección válida")],
        choices=[('Yes','Sí'),('No','No')])
-    eyes = RadioField('¿Usted sintió el vumo en los ojos? Por ejemplo, ardor o prurito',\
+    throat = RadioField('¿Usted sintió el vumo en la garganta? Por ejemplo, ardor o prurito',
+       [validators.InputRequired(message="No es una selección válida")],
        choices=[('Yes','Sí'),('No','No')])
-    skin = RadioField('¿Usted sintió el vumo en la piel? Por ejemplo, ardor o prurito',\
+    eyes = RadioField('¿Usted sintió el vumo en los ojos? Por ejemplo, ardor o prurito',
+       [validators.InputRequired(message="No es una selección válida")],
        choices=[('Yes','Sí'),('No','No')])
-    tired = RadioField('¿El vumo le hizo sentir inusualmente cansado/a?',\
+    skin = RadioField('¿Usted sintió el vumo en la piel? Por ejemplo, ardor o prurito',
+       [validators.InputRequired(message="No es una selección válida")],
        choices=[('Yes','Sí'),('No','No')])
-    nausea = RadioField('¿El vumo le provocó náuseas?',\
+    tired = RadioField('¿El vumo le hizo sentir inusualmente cansado/a?',
+       [validators.InputRequired(message="No es una selección válida")],
+       choices=[('Yes','Sí'),('No','No')])
+    nausea = RadioField('¿El vumo le provocó náuseas?',
+       [validators.InputRequired(message="No es una selección válida")],
        choices=[('Yes','Sí'),('No','No')])
     otherObs = TextAreaField('¿Podía ver el vumo? ¿Cómo se veía?\
        Por ejemplo el color, la visibilidad. Para cualquier observación, puede escribir en este espacio',\
@@ -218,7 +226,7 @@ class GasExperiencesMap(Form):
 #Gas experiences map form (es)
 class GasExperiencesMapEs(Form):
     question = SelectField('Ver respuestas a la pregunta:',\
-       choices=[('sense',"¿Usted sintió el vumo? (i.e. 'Sí' a cualquier pregunta"),\
+       choices=[('sense',"¿Usted sintió el vumo? (i.e. 'Sí' a cualquier pregunta)"),\
        ('smell','¿Usted sintió el olor del vumo?'),('throat', '¿Usted sintió el vumo en la garganta?'),\
        ('eyes', '¿Usted sintió el vumo en los ojos?'), ('skin', '¿Usted sintió el vumo en la piel?'),\
        ('tired', '¿El vumo le hizo sentir inusualmente cansado/a?'), ('nausea', '¿El vumo le provocó náuseas?')])
@@ -279,7 +287,8 @@ class FeedbackForm(Form):
 
 #Feedback form (es)
 class FeedbackFormEs(Form):
-    feedback = TextAreaField('Comentarios:',[validators.Length(min=1, max=5000)])
+    feedback = TextAreaField('Comentarios:',
+       [validators.Length(min=1, max=5000, message="Entre 1 y 5000 caracteres solamente")])
 
 #feedback
 @app.route('/Feedback',methods=['GET', 'POST'])
