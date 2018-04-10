@@ -12,7 +12,9 @@
     </style>
   </head>
   <body>
-    {% include 'includes/_navbar-es.html' %}
+    {% with subd=subd %}
+      {% include 'includes/_navbar-es.html' %}
+    {% endwith %}
     <div class="container">
       {% include 'includes/_messages.html' %}
       {% block body %}{% endblock %}

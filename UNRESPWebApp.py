@@ -14,6 +14,15 @@ app.secret_key=key
 DATABASE = 'UNRESPWeb.db'
 assert os.path.exists(DATABASE), "Unable to locate database"
 
+#Set subdomain...
+#If running locally (or index is the domain) set to blank, i.e. subd=""
+#If index is a subdomain, set as appropriate *including* leading slash, e.g. subd="/vumo-data"
+#Routes in @app.route() should NOT include subd, but all other references should...
+#Use redirect(subd + '/route') rather than redirect(url_for(route))
+#Pass subd=subd into every render_template so that it can be used to set the links appropriately
+#
+subd="/vumo-data"
+
 #Connect to DB
 def get_db():
     db = getattr(g, '_database', None)
@@ -49,23 +58,22 @@ def index():
     supported_languages = ["en", "es"]
     try:
         lang = request.accept_languages.best_match(supported_languages)
-        print(lang)
     except:
         lang = "es"
     if(lang=="en"):
-        return redirect(url_for('Home'))
+        return redirect(subd+'/en')
     else:
-        return redirect(url_for('Home_es'))
+        return redirect(subd+'/es')
 
 #Home
 @app.route('/en')
 def Home():
-    return render_template('home.html')
+    return render_template('home.html',subd=subd)
 
 #Home (es)
 @app.route('/es')
 def Home_es():
-    return render_template('home-es.html')
+    return render_template('home-es.html',subd=subd)
 
 #Gas experiences form
 class GasExperiencesForm(Form):
@@ -177,8 +185,8 @@ def Questionnaire():
         cur.close()
 
         flash('You successfully submitted the questionnaire', 'success')
-        return redirect(url_for('Questionnaire'))
-    return render_template('Gas_Experiences.html',form=form)
+        return redirect(subd+'/Questionnaire')
+    return render_template('Gas_Experiences.html',form=form,subd=subd)
 
 #Questionnaire (es)
 @app.route('/Encuesta',methods=['GET', 'POST'])
@@ -216,8 +224,8 @@ def Questionnaire_Es():
         cur.close()
 
         flash('Enviaste con éxito la encuesta', 'success')
-        return redirect(url_for('Questionnaire_Es'))
-    return render_template('Gas_Experiences-es.html',form=form)
+        return redirect(subd+'/Encuesta')
+    return render_template('Gas_Experiences-es.html',form=form,subd=subd)
 
 #Gas experiences map form
 class GasExperiencesMap(Form):
@@ -273,7 +281,7 @@ def Maps():
             subData = subData[subData['precip']==form.precip.data]
     else:
         question = 'sense'
-    return render_template('form_maps.html',subData=subData,question=question,form=form)
+    return render_template('form_maps.html',subData=subData,question=question,form=form,subd=subd)
 
 #Gas experiences maps (es)
 @app.route('/Mapas',methods=['GET', 'POST'])
@@ -293,7 +301,7 @@ def Mapas():
             subData = subData[subData['precip']==form.precip.data]
     else:
         question = 'sense'
-    return render_template('form_maps-es.html',subData=subData,question=question,form=form)
+    return render_template('form_maps-es.html',subData=subData,question=question,form=form,subd=subd)
 
 #Feedback form
 class FeedbackForm(Form):
@@ -321,8 +329,8 @@ def Feedback():
         #Close connection
         cur.close()
         flash('You successfully submitted the feedback form', 'success')
-        return redirect(url_for('Feedback'))
-    return render_template('feedback.html',form=form)
+        return redirect(subd+'/Feedback')
+    return render_template('feedback.html',form=form,subd=subd)
 
 #feedback (es)
 @app.route('/Comentarios',methods=['GET', 'POST'])
@@ -341,8 +349,8 @@ def Comentarios():
         #Close connection
         cur.close()
         flash('Enviaste con éxito los comentarios', 'success')
-        return redirect(url_for('Comentarios'))
-    return render_template('feedback-es.html',form=form)
+        return redirect(subd+'/Comentarios')
+    return render_template('feedback-es.html',form=form,subd=subd)
 
 if __name__ == '__main__':
     app.run()
