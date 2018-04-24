@@ -283,6 +283,35 @@ def Maps():
         question = 'sense'
     return render_template('form_maps.html',subData=subData,question=question,form=form,subd=subd)
 
+#Function to translate database answers to Spanish
+def translateDB(subData):
+    for index, row in subData.iterrows():
+        #Translate Yes/No fields:
+        for field in ["smell","throat","eyes","skin","tired","nausea"]:
+            if row[field] == "Yes":
+                subData.loc[index,field] = "Sí"
+        #Translate wind speed field:
+        if row["windSpeed"] == "No wind":
+            subData.loc[index,"windSpeed"] = "No había viento"
+        elif row["windSpeed"] == "Slow wind":
+            subData.loc[index,"windSpeed"] = "No muy fuerte"
+        elif row["windSpeed"] == "Strong wind":
+            subData.loc[index,"windSpeed"] = "Viento fuerte"
+        elif row["windSpeed"] == "Very strong wind":
+            subData.loc[index,"windSpeed"] = "Viento muy fuerte"
+        elif row["windSpeed"] == "Dont know":
+            subData.loc[index,"windSpeed"] = "No se sabe"
+        #Translate precipitation field:
+        if row["precip"] == "No precipitation":
+            subData.loc[index,"precip"] = "No había lluvia"
+        elif row["precip"] == "Light rain":
+            subData.loc[index,"precip"] = "Lluvia ligera"
+        elif row["precip"] == "Rain":
+            subData.loc[index,"precip"] = "Lluvia"
+        elif row["precip"] == "Dont know":
+            subData.loc[index,"precip"] = "No se sabe"
+    return subData
+
 #Gas experiences maps (es)
 @app.route('/Mapas',methods=['GET', 'POST'])
 def Mapas():
@@ -301,7 +330,8 @@ def Mapas():
             subData = subData[subData['precip']==form.precip.data]
     else:
         question = 'sense'
-    return render_template('form_maps-es.html',subData=subData,question=question,form=form,subd=subd)
+    subDataEs = translateDB(subData)
+    return render_template('form_maps-es.html',subData=subDataEs,question=question,form=form)
 
 #Feedback form
 class FeedbackForm(Form):
