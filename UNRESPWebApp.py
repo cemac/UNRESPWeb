@@ -290,6 +290,9 @@ def translateDB(subData):
         for field in ["smell","throat","eyes","skin","tired","nausea"]:
             if row[field] == "Yes":
                 subData.loc[index,field] = "Sí"
+        #Translate wind direction field:
+        if row["windDir"] == "Dont know":
+            subData.loc[index,"windDir"] = "No se sabe"
         #Translate wind speed field:
         if row["windSpeed"] == "No wind":
             subData.loc[index,"windSpeed"] = "No había viento"
