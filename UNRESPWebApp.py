@@ -334,7 +334,7 @@ def Mapas():
     else:
         question = 'sense'
     subDataEs = translateDB(subData)
-    return render_template('form_maps-es.html',subData=subDataEs,question=question,form=form)
+    return render_template('form_maps-es.html',subData=subDataEs,question=question,form=form,subd=subd)
 
 #Feedback form
 class FeedbackForm(Form):
